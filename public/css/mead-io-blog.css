@@ -754,7 +754,10 @@ form {
 label {
   color: #757575;
 }
-form input, form select, form button, form textarea, form .radio-select {
+form input, form select, 
+form button, form textarea, 
+form .radio-select, 
+form .captcha {
   border: 0;
   outline: 0;
   padding: 1em;

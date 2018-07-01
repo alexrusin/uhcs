@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="css/mead-io-blog.css">
     @stack('styles')
     <!-- Scripts -->
     <script>
@@ -21,7 +22,7 @@
             ])
         !!};
     </script>
-  <link rel="stylesheet" href="css/mead-io-blog.css">
+   <script src='https://www.google.com/recaptcha/api.js'></script>
   
 </head>
 
@@ -230,13 +231,13 @@
     <div class="section-filter"></div>
 
     <div class="content">
-      <h1>Contact Us</h1>
+      <h1>Client Information Form</h1>
       <client-form></client-form>
     </div>
   </div>
 
-
     </div>
+    @include('shared.alert')
     <footer class="l-footer">
     <div>
       <p>Unlimited Health Care Services <br> 2018 &copy; All rights reserved</p>
@@ -289,7 +290,6 @@
       callback: function ( anchor, toggle ) {} // Function to run after scrolling
   });
   </script>
-
   @stack('scripts')
   </body>
 </html>

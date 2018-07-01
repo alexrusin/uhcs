@@ -2,20 +2,23 @@
     <div>
         <form class="cf" @keydown="form.errors.clear($event.target.name)">
             
-            <input type="text" placeholder="Client's name" v-model="form.name">
+            <input type="text" id="name" name="name" placeholder="Client's name" v-model="form.name">
             <span class="help alert-danger" v-if="form.errors.has('name')" v-text="form.errors.get('name')"></span>
             
-            <input type="text" placeholder="Contact person" v-model="form.contact_person">
+            <input type="text" id="contact_person" name="contact_person" placeholder="Contact person" v-model="form.contact_person">
             <span class="help alert-danger" v-if="form.errors.has('contact_person')" v-text="form.errors.get('contact_person')"></span>
 
-            <input type="text" placeholder="Refered by" v-model="form.refered_by">
-            <span class="help alert-danger" v-if="form.errors.has('refered_by')" v-text="form.errors.get('refered_by')"></span>
-
-            <input type="text" placeholder="Phone" v-model="form.phone"> 
-            <span class="help alert-danger" v-if="form.errors.has('phone')" v-text="form.errors.get('phone')"></span>
-
-            <input type="email" placeholder="Contact email" v-model="form.email">
-            <span class="help alert-danger" v-if="form.errors.has('email')" v-text="form.errors.get('email')"></span>
+            <input type="text" id="referred_by" name="referred_by" placeholder="Referred by" v-model="form.referred_by">
+            <span class="help alert-danger" v-if="form.errors.has('referred_by')" v-text="form.errors.get('referred_by')"></span>
+            <div class="half left cf">
+                <input type="tel" id="phone" name="phone"placeholder="Contact Phone" v-model="form.phone" v-mask="'###-###-####'"> 
+                <span class="help alert-danger" v-if="form.errors.has('phone')" v-text="form.errors.get('phone')"></span>
+            </div>
+            
+            <div class="half right cf">
+                <input type="email" id="email" name="email" placeholder="Contact email" v-model="form.email">
+                <span class="help alert-danger" v-show="form.errors.has('email')" v-text="form.errors.get('email')"></span>
+            </div>
 
             <select>
                   <option disabled selected value="" class="placeholder">Please select relationship of contact person to client...</option>
@@ -45,7 +48,7 @@
                 </label>
             </div>
 
-            <input v-if="present_location == 'Other'" type="text" placeholder="Please specify client's location">
+            <input v-show="present_location == 'Other'" type="text" placeholder="Please specify client's location">
 
             <select>
                   <option disabled selected value="" class="placeholder">Please select type of care desired...</option>
@@ -68,7 +71,7 @@
                 </label>
             </div>
 
-            <select v-if="condition == 'Confused'">
+            <select v-show="condition == 'Confused'">
                   <option selected value="" class="placeholder">Please select if applies...</option>
                   <option>Dimentia</option>
                   <option>Alzheimer's</option>
@@ -85,7 +88,7 @@
                 </label>
             </div>
 
-            <select v-if="canWalk == 'NonAmbulatory'">
+            <select v-show="canWalk == 'NonAmbulatory'">
                   <option selected value="" class="placeholder">Please select mobility device if applies...</option>
                   <option>Manual Wheel Chair</option>
                   <option>Motorized Wheel Chair</option>
@@ -93,16 +96,26 @@
                   <option>Walker</option>
                   <option>Cane</option>
             </select>
+            
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="input-submit" @click="onSubmit">
+                <span class="buttonText">Submit</span>
+                <span class="buttonLoadingImage hiddenButtonElement"></span>
+            </button>
 
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="input-submit" @click="onSubmit">Submit</button>
-            <p v-if="message != ''" :class="[messageClass, alertType]">{{message}}</p>
+            <div class="captcha">
+                <div class="g-recaptcha" data-sitekey="6LfPrWEUAAAAAEDIBvCcd9Y7ktvgTFXa5114CYm_"></div>
+            </div>
+             <span class="help alert-danger" v-if="form.errors.has('g_recaptcha_response')" v-text="form.errors.get('g_recaptcha_response')"></span>
+
         </form>
     </div>
 </template>
 
 <script>
     import Form from '../utils/Form';
+    import {mask} from 'vue-the-mask'
     export default {
+        directives: {mask},
         mounted() {
             $("select").change(function(){
                 if ($(this).val()=="") $(this).css({color: "#757575"});
@@ -115,9 +128,10 @@
                 form: new Form({
                     name: '',
                     contact_person: '',
-                    refered_by: '',
+                    referred_by: '',
                     phone: '',
                     email: '',
+                    g_recaptcha_response: '',
                 }),
                 present_location: "",
                 condition: "",
@@ -131,17 +145,24 @@
 
         methods: {
             onSubmit() {
-               this.alertType = "message-info";
-               this.message = "Submitting form. Please wait...";
+
+               this.form.g_recaptcha_response = grecaptcha.getResponse();
+               this.showFixedAlert('Submitting form.  Please wait...', 'info');
+               this.disableButtons();
+               this.showSpinner('#input-submit');
                this.form.post('/client-form')
                     .then(response => {
-                        this.message = response.message;
-                        this.alertType = "message-success";
+                        this.showFixedAlert(response.message, 'success');
+                       this.enableButtons();
+                       window.grecaptcha.reset();
                     })
                     .catch(response => {
-                        this.message = "There was an error processing your request";
-                        this.alertType = "message-fail";
-                        console.log(this.form.errors.has('name'));
+                        this.showFixedAlert(response.message, 'danger');
+                        this.enableButtons();
+                        if(grecaptcha.getResponse()) {
+                            grecaptcha.reset();
+                        }
+                       
                     });
 
             }

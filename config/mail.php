@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@uhcs.test'),
+        'name' => env('MAIL_FROM_NAME', 'Admin at UHCS'),
     ],
 
     /*
@@ -119,5 +119,7 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+
+    'send_email_to' => env('SEND_EMAIL_TO', 'alex@alexrusin.com'),
 
 ];

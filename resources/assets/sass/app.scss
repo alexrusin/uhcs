@@ -7,3 +7,63 @@
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+/*====================== AJAX SPINNER =============================*/
+button{
+    position: relative;
+}
+
+#input-submit:focus, #input-submit:active {
+	outline: 0;
+}
+.buttonLoadingImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("../images/ajax-spinner.svg");
+    background-position: center;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: scale( 1 ) rotate( 0deg );   }
+  to   { transform: scale( 1 ) rotate( 360deg ); }
+}
+.hiddenButtonElement{
+    opacity: 0;
+}
+
+/*==================== Alert Message ===========================*/
+.fixed-alert-wrapper {
+    z-index: 9999999999;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.alert-is-fixed {
+    margin: auto;
+    max-width: 600px;
+    box-shadow: 0 2px 5px 2px rgba(128,128,128,0.2);
+    transition: opacity .15s linear;
+    pointer-events: all;
+}
+
+
+.full-screen-overlay {
+    z-index: 9999999999;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    pointer-events: none;
+}

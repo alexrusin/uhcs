@@ -963,7 +963,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(49);
+module.exports = __webpack_require__(50);
 
 
 /***/ }),
@@ -981,6 +981,29 @@ __webpack_require__(11);
 
 window.Vue = __webpack_require__(35);
 
+Vue.prototype.showFixedAlert = function (message, alertType) {
+
+    var alertHTML = '<div class="alert ' + 'alert-' + alertType + ' alert-is-fixed" id="feedbackAlert" role="alert">' + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + '<span aria-hidden="true">&times;</span>' + '</button>' + '<span id="alert-message">' + message + '</span>' + '</div>';
+    $("#fixed-alert").html(alertHTML);
+    setTimeout(function () {
+        $("#feedbackAlert").alert('close');
+    }, 5000);
+};
+
+Vue.prototype.disableButtons = function () {
+    return $(":button").prop("disabled", true);
+};
+Vue.prototype.enableButtons = function () {
+    $(":button").prop("disabled", false);
+    $(".buttonLoadingImage").addClass("hiddenButtonElement");
+    $(".buttonText").removeClass("hiddenButtonElement");
+};
+
+Vue.prototype.showSpinner = function (button) {
+    $(button).find(".buttonText").addClass("hiddenButtonElement");
+    $(button).find(".buttonLoadingImage").removeClass("hiddenButtonElement");
+};
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -990,7 +1013,7 @@ window.Vue = __webpack_require__(35);
 Vue.component('client-form', __webpack_require__(38));
 
 var app = new Vue({
-  el: '#app'
+    el: '#app'
 });
 
 /***/ }),
@@ -43080,7 +43103,7 @@ var normalizeComponent = __webpack_require__(44)
 /* script */
 var __vue_script__ = __webpack_require__(45)
 /* template */
-var __vue_template__ = __webpack_require__(48)
+var __vue_template__ = __webpack_require__(49)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43617,6 +43640,8 @@ module.exports = function normalizeComponent (
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_Form__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_the_mask__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_the_mask___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_the_mask__);
 //
 //
 //
@@ -43719,9 +43744,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    directives: { mask: __WEBPACK_IMPORTED_MODULE_1_vue_the_mask__["mask"] },
     mounted: function mounted() {
         $("select").change(function () {
             if ($(this).val() == "") $(this).css({ color: "#757575" });else $(this).css({ color: "#000" });
@@ -43732,9 +43770,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: new __WEBPACK_IMPORTED_MODULE_0__utils_Form__["a" /* default */]({
                 name: '',
                 contact_person: '',
-                refered_by: '',
+                referred_by: '',
                 phone: '',
-                email: ''
+                email: '',
+                g_recaptcha_response: ''
             }),
             present_location: "",
             condition: "",
@@ -43751,15 +43790,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSubmit: function onSubmit() {
             var _this = this;
 
-            this.alertType = "message-info";
-            this.message = "Submitting form. Please wait...";
+            this.form.g_recaptcha_response = grecaptcha.getResponse();
+            this.showFixedAlert('Submitting form.  Please wait...', 'info');
+            this.disableButtons();
+            this.showSpinner('#input-submit');
             this.form.post('/client-form').then(function (response) {
-                _this.message = response.message;
-                _this.alertType = "message-success";
+                _this.showFixedAlert(response.message, 'success');
+                _this.enableButtons();
+                window.grecaptcha.reset();
             }).catch(function (response) {
-                _this.message = "There was an error processing your request";
-                _this.alertType = "message-fail";
-                console.log(_this.form.errors.has('name'));
+                _this.showFixedAlert(response.message, 'danger');
+                _this.enableButtons();
+                if (grecaptcha.getResponse()) {
+                    grecaptcha.reset();
+                }
             });
         }
     }
@@ -43908,8 +43952,6 @@ var Form = function () {
     }, {
         key: 'onSuccess',
         value: function onSuccess(data) {
-            alert(data.message); // temporary
-
             this.reset();
         }
 
@@ -43996,7 +44038,7 @@ var Errors = function () {
     }, {
         key: "record",
         value: function record(errors) {
-            console.log(errors.errors);
+
             this.errors = errors.errors;
         }
 
@@ -44028,6 +44070,12 @@ var Errors = function () {
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
+(function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.VueTheMask=t():e.VueTheMask=t()})(this,function(){return function(e){function t(r){if(n[r])return n[r].exports;var a=n[r]={i:r,l:!1,exports:{}};return e[r].call(a.exports,a,a.exports,t),a.l=!0,a.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p=".",t(t.s=10)}([function(e,t){e.exports={"#":{pattern:/\d/},X:{pattern:/[0-9a-zA-Z]/},S:{pattern:/[a-zA-Z]/},A:{pattern:/[a-zA-Z]/,transform:function(e){return e.toLocaleUpperCase()}},a:{pattern:/[a-zA-Z]/,transform:function(e){return e.toLocaleLowerCase()}},"!":{escape:!0}}},function(e,t,n){"use strict";function r(e){var t=document.createEvent("Event");return t.initEvent(e,!0,!0),t}var a=n(2),o=n(0),i=n.n(o);t.a=function(e,t){var o=t.value;if((Array.isArray(o)||"string"==typeof o)&&(o={mask:o,tokens:i.a}),"INPUT"!==e.tagName.toLocaleUpperCase()){var u=e.getElementsByTagName("input");if(1!==u.length)throw new Error("v-mask directive requires 1 input, found "+u.length);e=u[0]}e.oninput=function(t){if(t.isTrusted){var i=e.selectionEnd,u=e.value[i-1];for(e.value=n.i(a.a)(e.value,o.mask,!0,o.tokens);i<e.value.length&&e.value.charAt(i-1)!==u;)i++;e===document.activeElement&&(e.setSelectionRange(i,i),setTimeout(function(){e.setSelectionRange(i,i)},0)),e.dispatchEvent(r("input"))}};var s=n.i(a.a)(e.value,o.mask,!0,o.tokens);s!==e.value&&(e.value=s,e.dispatchEvent(r("input")))}},function(e,t,n){"use strict";var r=n(6),a=n(5);t.a=function(e,t){var o=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],i=arguments[3];return Array.isArray(t)?n.i(a.a)(r.a,t,i)(e,t,o,i):n.i(r.a)(e,t,o,i)}},function(e,t,n){"use strict";function r(e){e.component(s.a.name,s.a),e.directive("mask",i.a)}Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),o=n.n(a),i=n(1),u=n(7),s=n.n(u);n.d(t,"TheMask",function(){return s.a}),n.d(t,"mask",function(){return i.a}),n.d(t,"tokens",function(){return o.a}),n.d(t,"version",function(){return c});var c="0.11.1";t.default=r,"undefined"!=typeof window&&window.Vue&&window.Vue.use(r)},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=n(1),a=n(0),o=n.n(a),i=n(2);t.default={name:"TheMask",props:{value:[String,Number],mask:{type:[String,Array],required:!0},masked:{type:Boolean,default:!1},tokens:{type:Object,default:function(){return o.a}}},directives:{mask:r.a},data:function(){return{lastValue:null,display:this.value}},watch:{value:function(e){e!==this.lastValue&&(this.display=e)},masked:function(){this.refresh(this.display)}},computed:{config:function(){return{mask:this.mask,tokens:this.tokens,masked:this.masked}}},methods:{onInput:function(e){e.isTrusted||this.refresh(e.target.value)},refresh:function(e){this.display=e;var e=n.i(i.a)(e,this.mask,this.masked,this.tokens);e!==this.lastValue&&(this.lastValue=e,this.$emit("input",e))}}}},function(e,t,n){"use strict";function r(e,t,n){return t=t.sort(function(e,t){return e.length-t.length}),function(r,a){for(var o=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],i=0;i<t.length;){var u=t[i];i++;var s=t[i];if(!(s&&e(r,s,!0,n).length>u.length))return e(r,u,o,n)}return""}}t.a=r},function(e,t,n){"use strict";function r(e,t){var n=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],r=arguments[3];e=e||"",t=t||"";for(var a=0,o=0,i="";a<t.length&&o<e.length;){var u=t[a],s=r[u],c=e[o];s&&!s.escape?(s.pattern.test(c)&&(i+=s.transform?s.transform(c):c,a++),o++):(s&&s.escape&&(a++,u=t[a]),n&&(i+=u),c===u&&o++,a++)}for(var f="";a<t.length&&n;){var u=t[a];if(r[u]){f="";break}f+=u,a++}return i+f}t.a=r},function(e,t,n){var r=n(8)(n(4),n(9),null,null);e.exports=r.exports},function(e,t){e.exports=function(e,t,n,r){var a,o=e=e||{},i=typeof e.default;"object"!==i&&"function"!==i||(a=e,o=e.default);var u="function"==typeof o?o.options:o;if(t&&(u.render=t.render,u.staticRenderFns=t.staticRenderFns),n&&(u._scopeId=n),r){var s=u.computed||(u.computed={});Object.keys(r).forEach(function(e){var t=r[e];s[e]=function(){return t}})}return{esModule:a,exports:o,options:u}}},function(e,t){e.exports={render:function(){var e=this,t=e.$createElement;return(e._self._c||t)("input",{directives:[{name:"mask",rawName:"v-mask",value:e.config,expression:"config"}],attrs:{type:"text"},domProps:{value:e.display},on:{input:e.onInput}})},staticRenderFns:[]}},function(e,t,n){e.exports=n(3)}])});
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -44053,7 +44101,12 @@ var render = function() {
               expression: "form.name"
             }
           ],
-          attrs: { type: "text", placeholder: "Client's name" },
+          attrs: {
+            type: "text",
+            id: "name",
+            name: "name",
+            placeholder: "Client's name"
+          },
           domProps: { value: _vm.form.name },
           on: {
             input: function($event) {
@@ -44081,7 +44134,12 @@ var render = function() {
               expression: "form.contact_person"
             }
           ],
-          attrs: { type: "text", placeholder: "Contact person" },
+          attrs: {
+            type: "text",
+            id: "contact_person",
+            name: "contact_person",
+            placeholder: "Contact person"
+          },
           domProps: { value: _vm.form.contact_person },
           on: {
             input: function($event) {
@@ -44107,86 +44165,117 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.form.refered_by,
-              expression: "form.refered_by"
+              value: _vm.form.referred_by,
+              expression: "form.referred_by"
             }
           ],
-          attrs: { type: "text", placeholder: "Refered by" },
-          domProps: { value: _vm.form.refered_by },
+          attrs: {
+            type: "text",
+            id: "referred_by",
+            name: "referred_by",
+            placeholder: "Referred by"
+          },
+          domProps: { value: _vm.form.referred_by },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.form, "refered_by", $event.target.value)
+              _vm.$set(_vm.form, "referred_by", $event.target.value)
             }
           }
         }),
         _vm._v(" "),
-        _vm.form.errors.has("refered_by")
+        _vm.form.errors.has("referred_by")
           ? _c("span", {
               staticClass: "help alert-danger",
               domProps: {
-                textContent: _vm._s(_vm.form.errors.get("refered_by"))
+                textContent: _vm._s(_vm.form.errors.get("referred_by"))
               }
             })
           : _vm._e(),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.form.phone,
-              expression: "form.phone"
-            }
-          ],
-          attrs: { type: "text", placeholder: "Phone" },
-          domProps: { value: _vm.form.phone },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c("div", { staticClass: "half left cf" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.phone,
+                expression: "form.phone"
+              },
+              {
+                name: "mask",
+                rawName: "v-mask",
+                value: "###-###-####",
+                expression: "'###-###-####'"
               }
-              _vm.$set(_vm.form, "phone", $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm.form.errors.has("phone")
-          ? _c("span", {
-              staticClass: "help alert-danger",
-              domProps: { textContent: _vm._s(_vm.form.errors.get("phone")) }
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.form.email,
-              expression: "form.email"
-            }
-          ],
-          attrs: { type: "email", placeholder: "Contact email" },
-          domProps: { value: _vm.form.email },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+            ],
+            attrs: {
+              type: "tel",
+              id: "phone",
+              name: "phone",
+              placeholder: "Contact Phone"
+            },
+            domProps: { value: _vm.form.phone },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "phone", $event.target.value)
               }
-              _vm.$set(_vm.form, "email", $event.target.value)
             }
-          }
-        }),
+          }),
+          _vm._v(" "),
+          _vm.form.errors.has("phone")
+            ? _c("span", {
+                staticClass: "help alert-danger",
+                domProps: { textContent: _vm._s(_vm.form.errors.get("phone")) }
+              })
+            : _vm._e()
+        ]),
         _vm._v(" "),
-        _vm.form.errors.has("email")
-          ? _c("span", {
-              staticClass: "help alert-danger",
-              domProps: { textContent: _vm._s(_vm.form.errors.get("email")) }
-            })
-          : _vm._e(),
+        _c("div", { staticClass: "half right cf" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.email,
+                expression: "form.email"
+              }
+            ],
+            attrs: {
+              type: "email",
+              id: "email",
+              name: "email",
+              placeholder: "Contact email"
+            },
+            domProps: { value: _vm.form.email },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "email", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.form.errors.has("email"),
+                expression: "form.errors.has('email')"
+              }
+            ],
+            staticClass: "help alert-danger",
+            domProps: { textContent: _vm._s(_vm.form.errors.get("email")) }
+          })
+        ]),
         _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
@@ -44309,14 +44398,20 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm.present_location == "Other"
-          ? _c("input", {
-              attrs: {
-                type: "text",
-                placeholder: "Please specify client's location"
-              }
-            })
-          : _vm._e(),
+        _c("input", {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.present_location == "Other",
+              expression: "present_location == 'Other'"
+            }
+          ],
+          attrs: {
+            type: "text",
+            placeholder: "Please specify client's location"
+          }
+        }),
         _vm._v(" "),
         _vm._m(1),
         _vm._v(" "),
@@ -44369,24 +44464,35 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm.condition == "Confused"
-          ? _c("select", [
-              _c(
-                "option",
-                {
-                  staticClass: "placeholder",
-                  attrs: { selected: "", value: "" }
-                },
-                [_vm._v("Please select if applies...")]
-              ),
-              _vm._v(" "),
-              _c("option", [_vm._v("Dimentia")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Alzheimer's")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Mild Cognitive Impairment")])
-            ])
-          : _vm._e(),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.condition == "Confused",
+                expression: "condition == 'Confused'"
+              }
+            ]
+          },
+          [
+            _c(
+              "option",
+              {
+                staticClass: "placeholder",
+                attrs: { selected: "", value: "" }
+              },
+              [_vm._v("Please select if applies...")]
+            ),
+            _vm._v(" "),
+            _c("option", [_vm._v("Dimentia")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Alzheimer's")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Mild Cognitive Impairment")])
+          ]
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "radio-select" }, [
           _c("label", { staticClass: "control-label" }, [
@@ -44437,28 +44543,39 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm.canWalk == "NonAmbulatory"
-          ? _c("select", [
-              _c(
-                "option",
-                {
-                  staticClass: "placeholder",
-                  attrs: { selected: "", value: "" }
-                },
-                [_vm._v("Please select mobility device if applies...")]
-              ),
-              _vm._v(" "),
-              _c("option", [_vm._v("Manual Wheel Chair")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Motorized Wheel Chair")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Scooter")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Walker")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Cane")])
-            ])
-          : _vm._e(),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.canWalk == "NonAmbulatory",
+                expression: "canWalk == 'NonAmbulatory'"
+              }
+            ]
+          },
+          [
+            _c(
+              "option",
+              {
+                staticClass: "placeholder",
+                attrs: { selected: "", value: "" }
+              },
+              [_vm._v("Please select mobility device if applies...")]
+            ),
+            _vm._v(" "),
+            _c("option", [_vm._v("Manual Wheel Chair")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Motorized Wheel Chair")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Scooter")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Walker")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Cane")])
+          ]
+        ),
         _vm._v(" "),
         _c(
           "button",
@@ -44467,13 +44584,24 @@ var render = function() {
             attrs: { type: "button", id: "input-submit" },
             on: { click: _vm.onSubmit }
           },
-          [_vm._v("Submit")]
+          [
+            _c("span", { staticClass: "buttonText" }, [_vm._v("Submit")]),
+            _vm._v(" "),
+            _c("span", {
+              staticClass: "buttonLoadingImage hiddenButtonElement"
+            })
+          ]
         ),
         _vm._v(" "),
-        _vm.message != ""
-          ? _c("p", { class: [_vm.messageClass, _vm.alertType] }, [
-              _vm._v(_vm._s(_vm.message))
-            ])
+        _vm._m(2),
+        _vm._v(" "),
+        _vm.form.errors.has("g_recaptcha_response")
+          ? _c("span", {
+              staticClass: "help alert-danger",
+              domProps: {
+                textContent: _vm._s(_vm.form.errors.get("g_recaptcha_response"))
+              }
+            })
           : _vm._e()
       ]
     )
@@ -44537,6 +44665,17 @@ var staticRenderFns = [
         _vm._v("Skilled Nursing Facility or Convalescent Hospital")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "captcha" }, [
+      _c("div", {
+        staticClass: "g-recaptcha",
+        attrs: { "data-sitekey": "6LfPrWEUAAAAAEDIBvCcd9Y7ktvgTFXa5114CYm_" }
+      })
+    ])
   }
 ]
 render._withStripped = true
@@ -44549,7 +44688,7 @@ if (false) {
 }
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

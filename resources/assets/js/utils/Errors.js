@@ -43,7 +43,7 @@ export default class Errors {
      * @param {object} errors
      */
     record(errors) {
-        console.log(errors.errors);
+       
         this.errors = errors.errors;
     }
 
