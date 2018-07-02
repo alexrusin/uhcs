@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('front-page');
-});
+Route::get('/', 'FrontPageController@show');
 
 Route::post('/client-form', 'FormController@storeClient');
 
