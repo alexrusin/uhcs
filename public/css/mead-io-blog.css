@@ -283,13 +283,17 @@ p {
   font-weight: bold; }
 
 .section-filter {
-  background: rgba(0, 0, 0, 0.6);
+  /*background: rgba(0, 0, 0, 0.6);*/
+  background-color: #caf9f2;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0; }
 
+div#contactus h1 {
+    color: #444;
+}
 .marketing-points {
   align-items: center;
   display: flex;

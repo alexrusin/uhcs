@@ -86,7 +86,7 @@
           </p>
 
           <p>
-              <a class="btn btn--white" data-scroll href="#contactus">Let Us Help You</a>
+              <a class="btn btn--white" data-scroll href="#contactus">Fill Out Client Form</a>
           </p>
       </div>
 
