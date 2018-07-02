@@ -982,7 +982,7 @@ __webpack_require__(11);
 window.Vue = __webpack_require__(35);
 
 Vue.prototype.showFixedAlert = function (message, alertType) {
-
+    clearTimeout();
     var alertHTML = '<div class="alert ' + 'alert-' + alertType + ' alert-is-fixed" id="feedbackAlert" role="alert">' + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + '<span aria-hidden="true">&times;</span>' + '</button>' + '<span id="alert-message">' + message + '</span>' + '</div>';
     $("#fixed-alert").html(alertHTML);
     setTimeout(function () {
@@ -43176,7 +43176,7 @@ exports = module.exports = __webpack_require__(41)(false);
 
 
 // module
-exports.push([module.i, "\nselect {\n  color: #757575;\n}\n.radio-select {\n    background: white;\n}\ninput[type=\"radio\"]{\n    -webkit-appearance: radio;\n    width: inherit;\n}\n.message-default {\n    margin-top: .7em !important;\n}\n.message-succes {\n    color: green;\n}\n.message-fail {\n    color: red\n}\n.message-info {\n    color: blue\n}\n", ""]);
+exports.push([module.i, "\nselect {\n  color: #757575;\n}\n.radio-select {\n    background: white;\n}\ninput[type=\"radio\"]{\n    width: inherit;\n}\n", ""]);
 
 // exports
 
@@ -43755,6 +43755,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -43770,18 +43781,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: new __WEBPACK_IMPORTED_MODULE_0__utils_Form__["a" /* default */]({
                 name: '',
                 contact_person: '',
+                date_of_birth: '',
                 referred_by: '',
                 phone: '',
                 email: '',
+                relationship_to_client: '',
+                present_location: '',
+                present_location_specify: '',
+                care_desired: '',
+                client_condition: '',
+                client_condition_specify: '',
+                walking_ability: '',
+                walking_ability_specify: '',
                 g_recaptcha_response: ''
-            }),
-            present_location: "",
-            condition: "",
-            canWalk: "",
-
-            message: "",
-            alertType: "",
-            messageClass: "message-default"
+            })
         };
     },
 
@@ -44088,6 +44101,9 @@ var render = function() {
         on: {
           keydown: function($event) {
             _vm.form.errors.clear($event.target.name)
+          },
+          change: function($event) {
+            _vm.form.errors.clear($event.target.name)
           }
         }
       },
@@ -44105,7 +44121,7 @@ var render = function() {
             type: "text",
             id: "name",
             name: "name",
-            placeholder: "Client's name"
+            placeholder: "Client's name (required)"
           },
           domProps: { value: _vm.form.name },
           on: {
@@ -44125,40 +44141,85 @@ var render = function() {
             })
           : _vm._e(),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.form.contact_person,
-              expression: "form.contact_person"
-            }
-          ],
-          attrs: {
-            type: "text",
-            id: "contact_person",
-            name: "contact_person",
-            placeholder: "Contact person"
-          },
-          domProps: { value: _vm.form.contact_person },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c("div", { staticClass: "half left cf" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.contact_person,
+                expression: "form.contact_person"
               }
-              _vm.$set(_vm.form, "contact_person", $event.target.value)
+            ],
+            attrs: {
+              type: "text",
+              id: "contact_person",
+              name: "contact_person",
+              placeholder: "Client's contact person (required)"
+            },
+            domProps: { value: _vm.form.contact_person },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "contact_person", $event.target.value)
+              }
             }
-          }
-        }),
+          }),
+          _vm._v(" "),
+          _vm.form.errors.has("contact_person")
+            ? _c("span", {
+                staticClass: "help alert-danger",
+                domProps: {
+                  textContent: _vm._s(_vm.form.errors.get("contact_person"))
+                }
+              })
+            : _vm._e()
+        ]),
         _vm._v(" "),
-        _vm.form.errors.has("contact_person")
-          ? _c("span", {
-              staticClass: "help alert-danger",
-              domProps: {
-                textContent: _vm._s(_vm.form.errors.get("contact_person"))
+        _c("div", { staticClass: "half right cf" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.date_of_birth,
+                expression: "form.date_of_birth"
+              },
+              {
+                name: "mask",
+                rawName: "v-mask",
+                value: "##/##/####",
+                expression: "'##/##/####'"
               }
-            })
-          : _vm._e(),
+            ],
+            attrs: {
+              type: "tel",
+              id: "date_of_birth",
+              name: "date_of_birth",
+              placeholder: "Client's DOB (mm/dd/yyyy)"
+            },
+            domProps: { value: _vm.form.date_of_birth },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "date_of_birth", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.form.errors.has("date_of_birth")
+            ? _c("span", {
+                staticClass: "help alert-danger",
+                domProps: {
+                  textContent: _vm._s(_vm.form.errors.get("date_of_birth"))
+                }
+              })
+            : _vm._e()
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -44201,6 +44262,47 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
+                value: _vm.form.email,
+                expression: "form.email"
+              }
+            ],
+            attrs: {
+              type: "email",
+              id: "email",
+              name: "email",
+              placeholder: "Contact email (required)"
+            },
+            domProps: { value: _vm.form.email },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "email", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.form.errors.has("email"),
+                expression: "form.errors.has('email')"
+              }
+            ],
+            staticClass: "help alert-danger",
+            domProps: { textContent: _vm._s(_vm.form.errors.get("email")) }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "half right cf" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
                 value: _vm.form.phone,
                 expression: "form.phone"
               },
@@ -44236,52 +44338,83 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "half right cf" }, [
-          _c("input", {
+        _c(
+          "select",
+          {
             directives: [
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.form.email,
-                expression: "form.email"
+                value: _vm.form.relationship_to_client,
+                expression: "form.relationship_to_client"
               }
             ],
             attrs: {
-              type: "email",
-              id: "email",
-              name: "email",
-              placeholder: "Contact email"
+              id: "relationship_to_client",
+              name: "relationship_to_client"
             },
-            domProps: { value: _vm.form.email },
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.form, "email", $event.target.value)
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.form,
+                  "relationship_to_client",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
               }
             }
-          }),
-          _vm._v(" "),
-          _c("span", {
-            directives: [
+          },
+          [
+            _c(
+              "option",
               {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.form.errors.has("email"),
-                expression: "form.errors.has('email')"
-              }
-            ],
-            staticClass: "help alert-danger",
-            domProps: { textContent: _vm._s(_vm.form.errors.get("email")) }
-          })
-        ]),
+                staticClass: "placeholder",
+                attrs: { disabled: "", selected: "", value: "" }
+              },
+              [
+                _vm._v(
+                  "Please select relationship of contact person to client (required)"
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Myself" } }, [_vm._v("Myself")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Spouse" } }, [_vm._v("Spouse")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Parent" } }, [_vm._v("Parent")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Relative" } }, [
+              _vm._v("Relative")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Friend" } }, [_vm._v("Friend")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Other" } }, [_vm._v("Other")])
+          ]
+        ),
         _vm._v(" "),
-        _vm._m(0),
+        _vm.form.errors.has("relationship_to_client")
+          ? _c("span", {
+              staticClass: "help alert-danger",
+              domProps: {
+                textContent: _vm._s(
+                  _vm.form.errors.get("relationship_to_client")
+                )
+              }
+            })
+          : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "radio-select" }, [
           _c("label", { staticClass: "control-label" }, [
-            _vm._v("Present location of client")
+            _vm._v("Present location of client (required)")
           ]),
           _c("br"),
           _vm._v(" "),
@@ -44291,15 +44424,17 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.present_location,
-                  expression: "present_location"
+                  value: _vm.form.present_location,
+                  expression: "form.present_location"
                 }
               ],
               attrs: { type: "radio", value: "Hospital" },
-              domProps: { checked: _vm._q(_vm.present_location, "Hospital") },
+              domProps: {
+                checked: _vm._q(_vm.form.present_location, "Hospital")
+              },
               on: {
                 change: function($event) {
-                  _vm.present_location = "Hospital"
+                  _vm.$set(_vm.form, "present_location", "Hospital")
                 }
               }
             }),
@@ -44312,17 +44447,17 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.present_location,
-                  expression: "present_location"
+                  value: _vm.form.present_location,
+                  expression: "form.present_location"
                 }
               ],
               attrs: { type: "radio", value: "Nursing Home" },
               domProps: {
-                checked: _vm._q(_vm.present_location, "Nursing Home")
+                checked: _vm._q(_vm.form.present_location, "Nursing Home")
               },
               on: {
                 change: function($event) {
-                  _vm.present_location = "Nursing Home"
+                  _vm.$set(_vm.form, "present_location", "Nursing Home")
                 }
               }
             }),
@@ -44335,15 +44470,17 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.present_location,
-                  expression: "present_location"
+                  value: _vm.form.present_location,
+                  expression: "form.present_location"
                 }
               ],
               attrs: { type: "radio", value: "At Home" },
-              domProps: { checked: _vm._q(_vm.present_location, "At Home") },
+              domProps: {
+                checked: _vm._q(_vm.form.present_location, "At Home")
+              },
               on: {
                 change: function($event) {
-                  _vm.present_location = "At Home"
+                  _vm.$set(_vm.form, "present_location", "At Home")
                 }
               }
             }),
@@ -44356,20 +44493,24 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.present_location,
-                  expression: "present_location"
+                  value: _vm.form.present_location,
+                  expression: "form.present_location"
                 }
               ],
               attrs: { type: "radio", value: "Assisted Living Facility" },
               domProps: {
                 checked: _vm._q(
-                  _vm.present_location,
+                  _vm.form.present_location,
                   "Assisted Living Facility"
                 )
               },
               on: {
                 change: function($event) {
-                  _vm.present_location = "Assisted Living Facility"
+                  _vm.$set(
+                    _vm.form,
+                    "present_location",
+                    "Assisted Living Facility"
+                  )
                 }
               }
             }),
@@ -44382,15 +44523,15 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.present_location,
-                  expression: "present_location"
+                  value: _vm.form.present_location,
+                  expression: "form.present_location"
                 }
               ],
               attrs: { type: "radio", value: "Other" },
-              domProps: { checked: _vm._q(_vm.present_location, "Other") },
+              domProps: { checked: _vm._q(_vm.form.present_location, "Other") },
               on: {
                 change: function($event) {
-                  _vm.present_location = "Other"
+                  _vm.$set(_vm.form, "present_location", "Other")
                 }
               }
             }),
@@ -44398,26 +44539,120 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
+        _vm.form.errors.has("present_location")
+          ? _c("span", {
+              staticClass: "help alert-danger",
+              domProps: {
+                textContent: _vm._s(_vm.form.errors.get("present_location"))
+              }
+            })
+          : _vm._e(),
+        _vm._v(" "),
         _c("input", {
           directives: [
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.present_location == "Other",
-              expression: "present_location == 'Other'"
+              value: _vm.form.present_location == "Other",
+              expression: "form.present_location == 'Other'"
+            },
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.form.present_location_specify,
+              expression: "form.present_location_specify"
             }
           ],
           attrs: {
             type: "text",
+            id: "present_location_specify",
             placeholder: "Please specify client's location"
+          },
+          domProps: { value: _vm.form.present_location_specify },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(
+                _vm.form,
+                "present_location_specify",
+                $event.target.value
+              )
+            }
           }
         }),
         _vm._v(" "),
-        _vm._m(1),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.care_desired,
+                expression: "form.care_desired"
+              }
+            ],
+            attrs: { id: "care_desired", name: "care_desired" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.form,
+                  "care_desired",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c(
+              "option",
+              {
+                staticClass: "placeholder",
+                attrs: { disabled: "", selected: "", value: "" }
+              },
+              [_vm._v("Please select type of care desired (required)")]
+            ),
+            _vm._v(" "),
+            _c("option", [_vm._v("Residential Care Home")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Assisted Living Home")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Independent Senior Living")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Nursing Care Home")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Hospice Care Home")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Adult Care Home")]),
+            _vm._v(" "),
+            _c("option", [
+              _vm._v("Skilled Nursing Facility or Convalescent Hospital")
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _vm.form.errors.has("care_desired")
+          ? _c("span", {
+              staticClass: "help alert-danger",
+              domProps: {
+                textContent: _vm._s(_vm.form.errors.get("care_desired"))
+              }
+            })
+          : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "radio-select" }, [
           _c("label", { staticClass: "control-label" }, [
-            _vm._v("Client's Condition")
+            _vm._v("Client's Condition (required)")
           ]),
           _c("br"),
           _vm._v(" "),
@@ -44427,15 +44662,15 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.condition,
-                  expression: "condition"
+                  value: _vm.form.client_condition,
+                  expression: "form.client_condition"
                 }
               ],
               attrs: { type: "radio", value: "Alert" },
-              domProps: { checked: _vm._q(_vm.condition, "Alert") },
+              domProps: { checked: _vm._q(_vm.form.client_condition, "Alert") },
               on: {
                 change: function($event) {
-                  _vm.condition = "Alert"
+                  _vm.$set(_vm.form, "client_condition", "Alert")
                 }
               }
             }),
@@ -44448,21 +44683,32 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.condition,
-                  expression: "condition"
+                  value: _vm.form.client_condition,
+                  expression: "form.client_condition"
                 }
               ],
               attrs: { type: "radio", value: "Confused" },
-              domProps: { checked: _vm._q(_vm.condition, "Confused") },
+              domProps: {
+                checked: _vm._q(_vm.form.client_condition, "Confused")
+              },
               on: {
                 change: function($event) {
-                  _vm.condition = "Confused"
+                  _vm.$set(_vm.form, "client_condition", "Confused")
                 }
               }
             }),
             _vm._v(" Confused\n            ")
           ])
         ]),
+        _vm._v(" "),
+        _vm.form.errors.has("client_condition")
+          ? _c("span", {
+              staticClass: "help alert-danger",
+              domProps: {
+                textContent: _vm._s(_vm.form.errors.get("client_condition"))
+              }
+            })
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "select",
@@ -44471,10 +44717,34 @@ var render = function() {
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.condition == "Confused",
-                expression: "condition == 'Confused'"
+                value: _vm.form.client_condition == "Confused",
+                expression: "form.client_condition == 'Confused'"
+              },
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.client_condition_specify,
+                expression: "form.client_condition_specify"
               }
-            ]
+            ],
+            attrs: { id: "client_condition_specify" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.form,
+                  "client_condition_specify",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
           },
           [
             _c(
@@ -44486,17 +44756,23 @@ var render = function() {
               [_vm._v("Please select if applies...")]
             ),
             _vm._v(" "),
-            _c("option", [_vm._v("Dimentia")]),
+            _c("option", { attrs: { value: "Dimentia" } }, [
+              _vm._v("Dimentia")
+            ]),
             _vm._v(" "),
-            _c("option", [_vm._v("Alzheimer's")]),
+            _c("option", { attrs: { value: "Alzheimers" } }, [
+              _vm._v("Alzheimer's")
+            ]),
             _vm._v(" "),
-            _c("option", [_vm._v("Mild Cognitive Impairment")])
+            _c("option", { attrs: { value: "Mild Cognitive Impairment" } }, [
+              _vm._v("Mild Cognitive Impairment")
+            ])
           ]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "radio-select" }, [
           _c("label", { staticClass: "control-label" }, [
-            _vm._v("Client's Walking Ability")
+            _vm._v("Client's Walking Ability (required)")
           ]),
           _c("br"),
           _vm._v(" "),
@@ -44506,19 +44782,21 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.canWalk,
-                  expression: "canWalk"
+                  value: _vm.form.walking_ability,
+                  expression: "form.walking_ability"
                 }
               ],
               attrs: { type: "radio", value: "Ambulatory" },
-              domProps: { checked: _vm._q(_vm.canWalk, "Ambulatory") },
+              domProps: {
+                checked: _vm._q(_vm.form.walking_ability, "Ambulatory")
+              },
               on: {
                 change: function($event) {
-                  _vm.canWalk = "Ambulatory"
+                  _vm.$set(_vm.form, "walking_ability", "Ambulatory")
                 }
               }
             }),
-            _vm._v(" No help\n            ")
+            _vm._v(" No help needed\n            ")
           ]),
           _vm._v(" "),
           _c("label", { staticClass: "radio-inline" }, [
@@ -44527,21 +44805,32 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.canWalk,
-                  expression: "canWalk"
+                  value: _vm.form.walking_ability,
+                  expression: "form.walking_ability"
                 }
               ],
-              attrs: { type: "radio", value: "NonAmbulatory" },
-              domProps: { checked: _vm._q(_vm.canWalk, "NonAmbulatory") },
+              attrs: { type: "radio", value: "Non-ambulatory" },
+              domProps: {
+                checked: _vm._q(_vm.form.walking_ability, "Non-ambulatory")
+              },
               on: {
                 change: function($event) {
-                  _vm.canWalk = "NonAmbulatory"
+                  _vm.$set(_vm.form, "walking_ability", "Non-ambulatory")
                 }
               }
             }),
             _vm._v(" With help of mobility device\n            ")
           ])
         ]),
+        _vm._v(" "),
+        _vm.form.errors.has("walking_ability")
+          ? _c("span", {
+              staticClass: "help alert-danger",
+              domProps: {
+                textContent: _vm._s(_vm.form.errors.get("walking_ability"))
+              }
+            })
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "select",
@@ -44550,10 +44839,34 @@ var render = function() {
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.canWalk == "NonAmbulatory",
-                expression: "canWalk == 'NonAmbulatory'"
+                value: _vm.form.walking_ability == "Non-ambulatory",
+                expression: "form.walking_ability == 'Non-ambulatory'"
+              },
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.walking_ability_specify,
+                expression: "form.walking_ability_specify"
               }
-            ]
+            ],
+            attrs: { id: "walking_ability_specify" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.form,
+                  "walking_ability_specify",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
           },
           [
             _c(
@@ -44565,15 +44878,19 @@ var render = function() {
               [_vm._v("Please select mobility device if applies...")]
             ),
             _vm._v(" "),
-            _c("option", [_vm._v("Manual Wheel Chair")]),
+            _c("option", { attrs: { value: "Manual Wheel Chair" } }, [
+              _vm._v("Manual Wheel Chair")
+            ]),
             _vm._v(" "),
-            _c("option", [_vm._v("Motorized Wheel Chair")]),
+            _c("option", { attrs: { value: "Motorized Wheel Chair" } }, [
+              _vm._v("Motorized Wheel Chair")
+            ]),
             _vm._v(" "),
-            _c("option", [_vm._v("Scooter")]),
+            _c("option", { attrs: { value: "Scooter" } }, [_vm._v("Scooter")]),
             _vm._v(" "),
-            _c("option", [_vm._v("Walker")]),
+            _c("option", { attrs: { value: "Walker" } }, [_vm._v("Walker")]),
             _vm._v(" "),
-            _c("option", [_vm._v("Cane")])
+            _c("option", { attrs: { value: "Cane" } }, [_vm._v("Cane")])
           ]
         ),
         _vm._v(" "),
@@ -44593,7 +44910,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(2),
+        _vm._m(0),
         _vm._v(" "),
         _vm.form.errors.has("g_recaptcha_response")
           ? _c("span", {
@@ -44608,64 +44925,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("select", [
-      _c(
-        "option",
-        {
-          staticClass: "placeholder",
-          attrs: { disabled: "", selected: "", value: "" }
-        },
-        [_vm._v("Please select relationship of contact person to client...")]
-      ),
-      _vm._v(" "),
-      _c("option", [_vm._v("Myself")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Mother")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Father")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Relative")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("A Friend")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Other")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("select", [
-      _c(
-        "option",
-        {
-          staticClass: "placeholder",
-          attrs: { disabled: "", selected: "", value: "" }
-        },
-        [_vm._v("Please select type of care desired...")]
-      ),
-      _vm._v(" "),
-      _c("option", [_vm._v("Residential Care Home")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Assisted Living Home")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Independent Senior Living")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Nursing Care Home")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Hospice Care Home")]),
-      _vm._v(" "),
-      _c("option", [_vm._v("Adult Care Home")]),
-      _vm._v(" "),
-      _c("option", [
-        _vm._v("Skilled Nursing Facility or Convalescent Hospital")
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

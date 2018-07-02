@@ -1,57 +1,65 @@
 <template>
     <div>
-        <form class="cf" @keydown="form.errors.clear($event.target.name)">
+        <form class="cf" @keydown="form.errors.clear($event.target.name)" @change="form.errors.clear($event.target.name)">
             
-            <input type="text" id="name" name="name" placeholder="Client's name" v-model="form.name">
+            <input type="text" id="name" name="name" placeholder="Client's name (required)" v-model="form.name">
             <span class="help alert-danger" v-if="form.errors.has('name')" v-text="form.errors.get('name')"></span>
-            
-            <input type="text" id="contact_person" name="contact_person" placeholder="Contact person" v-model="form.contact_person">
-            <span class="help alert-danger" v-if="form.errors.has('contact_person')" v-text="form.errors.get('contact_person')"></span>
+            <div class="half left cf">
+                <input type="text" id="contact_person" name="contact_person" placeholder="Client's contact person (required)" v-model="form.contact_person">
+                <span class="help alert-danger" v-if="form.errors.has('contact_person')" v-text="form.errors.get('contact_person')"></span>
+            </div>
+            <div class="half right cf">
+                <input type="tel" id="date_of_birth" name="date_of_birth" placeholder="Client's DOB (mm/dd/yyyy)" v-model="form.date_of_birth" v-mask="'##/##/####'"> 
+                <span class="help alert-danger" v-if="form.errors.has('date_of_birth')" v-text="form.errors.get('date_of_birth')"></span>
+            </div>
 
             <input type="text" id="referred_by" name="referred_by" placeholder="Referred by" v-model="form.referred_by">
             <span class="help alert-danger" v-if="form.errors.has('referred_by')" v-text="form.errors.get('referred_by')"></span>
             <div class="half left cf">
-                <input type="tel" id="phone" name="phone"placeholder="Contact Phone" v-model="form.phone" v-mask="'###-###-####'"> 
-                <span class="help alert-danger" v-if="form.errors.has('phone')" v-text="form.errors.get('phone')"></span>
-            </div>
-            
-            <div class="half right cf">
-                <input type="email" id="email" name="email" placeholder="Contact email" v-model="form.email">
+                <input type="email" id="email" name="email" placeholder="Contact email (required)" v-model="form.email">
                 <span class="help alert-danger" v-show="form.errors.has('email')" v-text="form.errors.get('email')"></span>
             </div>
 
-            <select>
-                  <option disabled selected value="" class="placeholder">Please select relationship of contact person to client...</option>
-                  <option>Myself</option>
-                  <option>Mother</option>
-                  <option>Father</option>
-                  <option>Relative</option>
-                  <option>A Friend</option>
-                  <option>Other</option>
-            </select>
-            <div class="radio-select">
-                 <label class="control-label">Present location of client</label><br>
-                <label class="radio-inline">
-                  <input type="radio" value="Hospital" v-model="present_location"> Hospital
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="Nursing Home" v-model="present_location"> Nursing Home
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="At Home" v-model="present_location"> At Home
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="Assisted Living Facility" v-model="present_location"> Assisted Living Facility
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="Other" v-model="present_location"> Other
-                </label>
+            <div class="half right cf">
+                <input type="tel" id="phone" name="phone" placeholder="Contact Phone" v-model="form.phone" v-mask="'###-###-####'"> 
+                <span class="help alert-danger" v-if="form.errors.has('phone')" v-text="form.errors.get('phone')"></span>
             </div>
 
-            <input v-show="present_location == 'Other'" type="text" placeholder="Please specify client's location">
+            <select id="relationship_to_client" name="relationship_to_client" v-model="form.relationship_to_client">
+                  <option disabled selected value="" class="placeholder">Please select relationship of contact person to client (required)</option>
+                  <option value="Myself">Myself</option>
+                  <option value="Spouse">Spouse</option>
+                   <option value="Parent">Parent</option>
+                  <option value="Relative">Relative</option>
+                  <option value="Friend">Friend</option>
+                  <option value="Other">Other</option>
+            </select>
+            <span class="help alert-danger" v-if="form.errors.has('relationship_to_client')" v-text="form.errors.get('relationship_to_client')"></span>
+            
+            <div class="radio-select">
+                 <label class="control-label">Present location of client (required)</label><br>
+                <label class="radio-inline">
+                  <input type="radio" value="Hospital" v-model="form.present_location"> Hospital
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" value="Nursing Home" v-model="form.present_location"> Nursing Home
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" value="At Home" v-model="form.present_location"> At Home
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" value="Assisted Living Facility" v-model="form.present_location"> Assisted Living Facility
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" value="Other" v-model="form.present_location"> Other
+                </label>
+            </div>
+            <span class="help alert-danger" v-if="form.errors.has('present_location')" v-text="form.errors.get('present_location')"></span>
 
-            <select>
-                  <option disabled selected value="" class="placeholder">Please select type of care desired...</option>
+            <input v-show="form.present_location == 'Other'" type="text" id="present_location_specify" placeholder="Please specify client's location" v-model="form.present_location_specify">
+
+            <select id="care_desired" name="care_desired" v-model="form.care_desired">
+                  <option disabled selected value="" class="placeholder">Please select type of care desired (required)</option>
                   <option>Residential Care Home</option>
                   <option>Assisted Living Home</option>
                   <option>Independent Senior Living</option>
@@ -60,41 +68,44 @@
                   <option>Adult Care Home</option>
                   <option>Skilled Nursing Facility or Convalescent Hospital</option>
             </select>
+            <span class="help alert-danger" v-if="form.errors.has('care_desired')" v-text="form.errors.get('care_desired')"></span>
 
             <div class="radio-select">
-                 <label class="control-label">Client's Condition</label><br>
+                 <label class="control-label">Client's Condition (required)</label><br>
                 <label class="radio-inline">
-                  <input type="radio" value="Alert" v-model="condition"> Alert
+                  <input type="radio" value="Alert" v-model="form.client_condition"> Alert
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" value="Confused" v-model="condition"> Confused
+                  <input type="radio" value="Confused" v-model="form.client_condition"> Confused
                 </label>
             </div>
+             <span class="help alert-danger" v-if="form.errors.has('client_condition')" v-text="form.errors.get('client_condition')"></span>
 
-            <select v-show="condition == 'Confused'">
+            <select v-show="form.client_condition == 'Confused'" id="client_condition_specify" v-model="form.client_condition_specify">
                   <option selected value="" class="placeholder">Please select if applies...</option>
-                  <option>Dimentia</option>
-                  <option>Alzheimer's</option>
-                  <option>Mild Cognitive Impairment</option>
+                  <option value="Dimentia">Dimentia</option>
+                  <option value="Alzheimers">Alzheimer's</option>
+                  <option value="Mild Cognitive Impairment">Mild Cognitive Impairment</option>
             </select>
 
             <div class="radio-select">
-                 <label class="control-label">Client's Walking Ability</label><br>
+                 <label class="control-label">Client's Walking Ability (required)</label><br>
                 <label class="radio-inline">
-                  <input type="radio" value="Ambulatory" v-model="canWalk"> No help
+                  <input type="radio" value="Ambulatory" v-model="form.walking_ability"> No help needed
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" value="NonAmbulatory" v-model="canWalk"> With help of mobility device
+                  <input type="radio" value="Non-ambulatory" v-model="form.walking_ability"> With help of mobility device
                 </label>
             </div>
+             <span class="help alert-danger" v-if="form.errors.has('walking_ability')" v-text="form.errors.get('walking_ability')"></span>
 
-            <select v-show="canWalk == 'NonAmbulatory'">
+            <select v-show="form.walking_ability == 'Non-ambulatory'" id="walking_ability_specify" v-model="form.walking_ability_specify">
                   <option selected value="" class="placeholder">Please select mobility device if applies...</option>
-                  <option>Manual Wheel Chair</option>
-                  <option>Motorized Wheel Chair</option>
-                  <option>Scooter</option>
-                  <option>Walker</option>
-                  <option>Cane</option>
+                  <option value="Manual Wheel Chair">Manual Wheel Chair</option>
+                  <option value="Motorized Wheel Chair">Motorized Wheel Chair</option>
+                  <option value="Scooter">Scooter</option>
+                  <option value="Walker">Walker</option>
+                  <option value="Cane">Cane</option>
             </select>
             
             <button type="button" class="btn btn-primary btn-lg btn-block" id="input-submit" @click="onSubmit">
@@ -128,18 +139,20 @@
                 form: new Form({
                     name: '',
                     contact_person: '',
+                    date_of_birth: '',
                     referred_by: '',
                     phone: '',
                     email: '',
+                    relationship_to_client:'',
+                    present_location: '',
+                    present_location_specify: '',
+                    care_desired: '',
+                    client_condition: '',
+                    client_condition_specify: '',
+                    walking_ability: '',
+                    walking_ability_specify:'',
                     g_recaptcha_response: '',
                 }),
-                present_location: "",
-                condition: "",
-                canWalk: "",
-
-                message: "",
-                alertType: "",
-                messageClass: "message-default"
             };
         },
 
@@ -179,23 +192,6 @@
     }
 
     input[type="radio"]{
-        -webkit-appearance: radio;
         width: inherit;
-    }
-
-    .message-default {
-        margin-top: .7em !important;
-    }
-
-    .message-succes {
-        color: green;
-    }
-
-    .message-fail {
-        color: red
-    }
-
-    .message-info {
-        color: blue
     }
 </style>
