@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Client;
 use Carbon\Carbon;
 use App\Mail\ClientIntakeForm;
+use App\Message;
 use App\Rules\Recaptcha;
 
 class FormController extends Controller
@@ -29,53 +29,12 @@ class FormController extends Controller
             'g_recaptcha_response' => [$recaptcha]
         ]); 
 
-        if (request('present_location') === 'Other' && !is_null(request('present_location_specify'))) {
-            $presentLocation = request('present_location_specify');
-        } else {
-            $presentLocation = request('present_location');
-        }
-
-        if (request('client_condition') === 'Confused' && !is_null(request('client_condition_specify'))) {
-            $clientCondition = request('client_condition_specify');
-        } else {
-            $clientCondition = request('client_condition');
-        }
-
-        if (request('walking_ability') === 'Non-ambulatory' && !is_null(request('walking_ability_specify'))) {
-            $walkingAbility = request('walking_ability_specify');
-        } else {
-            $walkingAbility = request('walking_ability');
-        }
-
-        if (request('date_of_birth')) {
-            $dateOfBirth = (new Carbon(request('date_of_birth')))->format('m/d/Y');
-        } else {
-            $dateOfBirth = null;
-        }
-
-       
-        
-
-        $client = (object) [
-            'name' => request('name'),
-            'contact_person' => request('contact_person'),
-            'date_of_birth' => $dateOfBirth,
-            'referred_by' => request('referred_by'),
-            'email' => request('email'),
-            'phone' => request('phone'),
-            'relationship_to_client' => request('relationship_to_client'),
-            'present_location' => $presentLocation,
-            'care_desired' => request('care_desired'),
-            'client_condition' => $clientCondition,
-            'walking_ability' => $walkingAbility,
-
-        ];
-
+        $clientInfo = Message::createFromFormRequest();
         $emails = config('mail.send_email_to');
         $emailsArray = explode(',', $emails);
 
         \Mail::to($emailsArray)
-            ->queue(new ClientIntakeForm($client));
+            ->queue(new ClientIntakeForm($clientInfo));
         
         return response(['message' => 'Your request has been submitted. Someone will contact you shortly'], 200);
     }
