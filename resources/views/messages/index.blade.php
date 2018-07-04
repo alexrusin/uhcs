@@ -58,11 +58,40 @@
 						<div class="col-md-12">
 							<div class="text-right">
 								<a href="#" class="btn btn-primary">Create Client Record</a>
-				       			<a href="#" class="btn btn-danger">Delete</a>
+				       			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal-{{$message->id}}">Delete</a>
 							</div>
 						</div>
 					</div>
 			    </div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="deleteModal-{{$message->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="deleteModalLabel">Are you sure?</h4>
+			      </div>
+			      <div class="modal-body">
+			       	 Are you sure you want to delete message for {{$message->name}}?
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			        
+			        <a class="btn btn-danger" href="{{ route('messages.delete', ['message' => $message]) }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('delete-message-{{$message->id}}').submit();">
+                                            Delete
+                                </a>
+
+                                <form id="delete-message-{{$message->id}}" action="{{ route('messages.delete', ['message' => $message]) }}" method="POST" style="display: none;">
+                                	{{ method_field('DELETE') }}
+                                    {{ csrf_field() }}
+                                </form>
+			      </div>
+			    </div>
+			  </div>
 			</div>
 
 			@empty

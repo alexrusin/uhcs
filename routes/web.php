@@ -20,4 +20,6 @@ Route::get('/admin/dashboard', 'HomeController@index');
 
 Route::get('/admin/messages', 'MessagesController@index')->name('messages');
 
+Route::delete('/admin/messages/{message}', 'MessagesController@delete')->name('messages.delete');
+
 
