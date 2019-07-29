@@ -25,7 +25,7 @@ class MessagesController extends Controller
     {
     	try {
     		$message->delete();
-    		request()->session()->flash('alert-success', 'Message have been deleted');
+    		request()->session()->flash('alert-success', 'Message has been deleted');
     	} catch (\Exception $e) {
     		\Log::error($e);
     		request()->session()->flash('alert-danger', 'There was an error deleting message');
